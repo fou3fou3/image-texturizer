@@ -1,1 +1,6 @@
 /target
+image-texturizer
+*.jpeg
+*.webp
+*.png
+*.jpg
