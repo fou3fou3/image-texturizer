@@ -22,7 +22,7 @@ fn resize_image(input_image: DynamicImage, h: u32, w: u32) -> DynamicImage {
 }
 
 fn print_rgb_text<W: Write>(writer: &mut W, r: u8, g: u8, b: u8, text: &str) {
-    write!(writer, "\x1b[38;2;{};{};{}m{}\x1b[0m", r, g, b, text).unwrap();
+    write!(writer, "\x1b[48;2;{};{};{}m{}\x1b[0m", r, g, b, text).unwrap();
 }
 
 fn print_assci_on_intensity(intensity: u8, r: u8, g: u8, b: u8) {
@@ -49,17 +49,13 @@ fn main() {
 
     for y in 0..resized_img.height() {
         for x in 0..resized_img.width() {
-            let intensity = gray_scale_pixel(
-                resized_img.get_pixel(x, y).channels()[0],
-                resized_img.get_pixel(x, y).channels()[1],
-                resized_img.get_pixel(x, y).channels()[2],
-            );
-            print_assci_on_intensity(
-                intensity,
-                resized_img.get_pixel(x, y).channels()[0],
-                resized_img.get_pixel(x, y).channels()[1],
-                resized_img.get_pixel(x, y).channels()[2],
-            )
+            let pixel = resized_img.get_pixel(x, y);
+            let channels = pixel.channels();
+
+            let (r, g, b) = (channels[0], channels[1], channels[2]);
+
+            let intensity = gray_scale_pixel(r, g, b);
+            print_assci_on_intensity(intensity, r, g, b)
         }
         print!("\n");
     }
